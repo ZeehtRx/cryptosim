@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Wallet | CryptoSim</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <style>
+        :root {
+            --primary-yellow: #FFD700;
+            --yellow-light: #FFF176;
+            --yellow-dark: #FBC02D;
+            --black: #1A1A1A;
+            --black-light: #2D2D2D;
+            --gray: #444444;
+            --gray-light: #666666;
+            --white: #FFFFFF;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--black);
+            color: var(--white);
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 10px;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1000;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background-color: var(--black-light);
+            padding: 25px 0;
+            z-index: 100;
+            transition: var(--transition);
+            border-right: 1px solid rgba(255, 215, 0, 0.1);
+            overflow-y: auto;
+        }
+        
+        .logo {
+            padding: 0 25px;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(45deg, var(--primary-yellow), var(--yellow-dark));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            transform: rotate(45deg);
+            transition: var(--transition);
+        }
+        
+        .logo:hover .logo-icon {
+            transform: rotate(0deg);
+        }
+        
+        .logo-icon i {
+            color: var(--black);
+            font-size: 20px;
+            transform: rotate(-45deg);
+        }
+        
+        .logo-text h2 {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary-yellow), var(--yellow-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .logo-text p {
+            font-size: 11px;
+            color: var(--gray-light);
+        }
+        
+        .nav-links {
+            list-style: none;
+            padding: 0 15px;
+        }
+        
+        .nav-links li {
+            margin-bottom: 8px;
+        }
+        
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            color: var(--gray-light);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+        
+        .nav-links a:hover {
+            background-color: rgba(255, 215, 0, 0.1);
+            color: var(--white);
+        }
+        
+        .nav-links a.active {
+            background-color: rgba(255, 215, 0, 0.15);
+            color: var(--primary-yellow);
+            border-left: 4px solid var(--primary-yellow);
+        }
+        
+        .nav-links i {
+            width: 24px;
+            margin-right: 15px;
+            font-size: 18px;
+        }
+        
+        .user-info {
+            position: absolute;
+            bottom: 30px;
+            left: 0;
+            right: 0;
+            padding: 0 25px;
+        }
+        
+        .user-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 215, 0, 0.1);
+        }
+        
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, var(--primary-yellow), var(--yellow-dark));
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--black);
+            font-weight: bold;
+        }
+        
+        .user-email {
+            color: var(--gray-light);
+            font-size: 12px;
+            margin-top: 5px;
+            word-break: break-all;
+        }
+        
+        .logout-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: rgba(231, 76, 60, 0.1);
+            color: #e74c3c;
+            border: none;
+            border-radius: 10px;
+            margin-top: 15px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .logout-btn:hover {
+            background-color: rgba(231, 76, 60, 0.2);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+            transition: var(--transition);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .header-title h1 {
+            font-size: 32px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .header-title p {
+            color: var(--gray-light);
+            margin-top: 5px;
+        }
+        
+        /* QR Container */
+        .qr-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+        
+        .qr-card {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.05), rgba(251, 192, 45, 0.02));
+            border-radius: 30px;
+            padding: 50px;
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .qr-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary-yellow), var(--yellow-dark));
+        }
+        
+        .qr-header {
+            margin-bottom: 40px;
+        }
+        
+        .qr-header h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: var(--white);
+        }
+        
+        .qr-header p {
+            color: var(--gray-light);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .qr-code-wrapper {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+        
+        .qr-image-container {
+            background-color: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            position: relative;
+        }
+        
+        .qr-image {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .qr-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        .qr-details {
+            flex: 1;
+            max-width: 400px;
+            text-align: left;
+        }
+        
+        .wallet-info {
+            background-color: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            color: var(--gray-light);
+            font-weight: 500;
+        }
+        
+        .info-value {
+            font-weight: 600;
+            font-family: monospace;
+            word-break: break-all;
+            text-align: right;
+            max-width: 250px;
+        }
+        
+        .qr-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 40px;
+        }
+        
+        .qr-action-btn {
+            padding: 18px;
+            border: none;
+            border-radius: 15px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-size: 16px;
+        }
+        
+        .btn-download {
+            background: linear-gradient(45deg, var(--primary-yellow), var(--yellow-dark));
+            color: var(--black);
+        }
+        
+        .btn-copy {
+            background: rgba(52, 152, 219, 0.1);
+            color: #3498db;
+            border: 1px solid rgba(52, 152, 219, 0.2);
+        }
+        
+        .btn-share {
+            background: rgba(155, 89, 182, 0.1);
+            color: #9b59b6;
+            border: 1px solid rgba(155, 89, 182, 0.2);
+        }
+        
+        .qr-action-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .qr-instructions {
+            margin-top: 50px;
+            text-align: left;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .instructions-title {
+            font-size: 22px;
+            margin-bottom: 25px;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .instructions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+        
+        .instruction-card {
+            background-color: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--transition);
+        }
+        
+        .instruction-card:hover {
+            border-color: rgba(255, 215, 0, 0.3);
+            transform: translateY(-5px);
+        }
+        
+        .instruction-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            background-color: rgba(255, 215, 0, 0.1);
+            color: var(--primary-yellow);
+        }
+        
+        .instruction-card h4 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: var(--white);
+        }
+        
+        .instruction-card p {
+            color: var(--gray-light);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--gray-light);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 50px;
+            font-size: 14px;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 25px;
+            background-color: rgba(255, 215, 0, 0.1);
+            color: var(--primary-yellow);
+            text-decoration: none;
+            border-radius: 12px;
+            margin-top: 20px;
+            transition: var(--transition);
+        }
+        
+        .back-btn:hover {
+            background-color: rgba(255, 215, 0, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+                padding-top: 70px;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            .header-title h1 {
+                font-size: 24px;
+            }
+            
+            .qr-code-wrapper {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .qr-details {
+                text-align: center;
+                max-width: 100%;
+            }
+            
+            .qr-image {
+                width: 250px;
+                height: 250px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .qr-card {
+                padding: 30px 20px;
+            }
+            
+            .qr-image {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .qr-actions {
+                grid-template-columns: 1fr;
+            }
+            
+            .instructions-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .qr-header h2 {
+                font-size: 24px;
+            }
+            
+            .qr-image {
+                width: 180px;
+                height: 180px;
+            }
+            
+            .info-item {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .info-value {
+                text-align: left;
+            }
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 20px rgba(255, 215, 0, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);
+            }
+        }
+        
+        .qr-image-container {
+            animation: pulse 2s infinite;
+        }
+        
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 215, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Menu Toggle -->
+    <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-coins"></i>
+            </div>
+            <div class="logo-text">
+                <h2>CryptoSim</h2>
+                <p>Esa Unggul University</p>
+            </div>
+        </div>
+        
+        <ul class="nav-links">
+            <li><a href="/dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="/exchange"><i class="fas fa-exchange-alt"></i> Exchange</a></li>
+            <li><a href="/wallet"><i class="fas fa-wallet"></i> Wallet</a></li>
+            <li><a href="/ecommerce"><i class="fas fa-shopping-cart"></i> E-commerce</a></li>
+            <li><a href="/wallet/qr" class="active"><i class="fas fa-qrcode"></i> QR Code</a></li>
+            <li><a href="/generate_report"><i class="fas fa-file-pdf"></i> Reports</a></li>
+        </ul>
+        
+        <div class="user-info">
+            <div class="user-card">
+                <div class="user-avatar">
+                    {{ user.username[0]|upper if user and user.username else 'U' }}
+                </div>
+                <h4>{{ user.username if user else 'Guest' }}</h4>
+                <a href="/logout" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <div class="header">
+            <div class="header-title">
+                <h1><i class="fas fa-qrcode"></i> Wallet QR Code</h1>
+                <p>Scan this QR code to receive cryptocurrency payments</p>
+            </div>
+        </div>
+        
+        <!-- QR Container -->
+        <div class="qr-container">
+            <div class="qr-card fade-in">
+                <div class="qr-header">
+                    <h2>Your Digital Wallet Address</h2>
+                    <p>Share this QR code with others to receive Bitcoin, Ethereum, or other cryptocurrencies. Anyone can scan it to send you crypto directly to your wallet.</p>
+                </div>
+                
+                <div class="qr-code-wrapper">
+                    <div class="qr-image-container">
+                        <div class="qr-image">
+                            <img src="{{ qr_path }}" alt="Wallet QR Code">
+                        </div>
+                    </div>
+                    
+                    <div class="qr-details">
+                        <div class="wallet-info">
+                            <div class="info-item">
+                                <span class="info-label">Wallet Address:</span>
+                                <span class="info-value" id="walletAddress">{{ wallet.wallet_address }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Network:</span>
+                                <span class="info-value">CryptoSim Testnet</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Supported Cryptos:</span>
+                                <span class="info-value">BTC, ETH</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Created:</span>
+                                <span class="info-value">{{ user.created_at.strftime('%d %b %Y') if user and user.created_at else 'Recently' }}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="qr-actions">
+                            <button class="qr-action-btn btn-download" id="downloadQR">
+                                <i class="fas fa-download"></i> Download QR
+                            </button>
+                            <button class="qr-action-btn btn-copy" id="copyAddress">
+                                <i class="fas fa-copy"></i> Copy Address
+                            </button>
+                            <button class="qr-action-btn btn-share" id="shareQR">
+                                <i class="fas fa-share-alt"></i> Share
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="qr-instructions fade-in" style="animation-delay: 0.2s;">
+                    <h3 class="instructions-title">
+                        <i class="fas fa-info-circle"></i> How to Use This QR Code
+                    </h3>
+                    <div class="instructions-grid">
+                        <div class="instruction-card">
+                            <div class="instruction-icon">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <h4>Mobile Payment</h4>
+                            <p>Open a crypto wallet app on your phone, tap "Receive" or "Scan", and point your camera at this QR code.</p>
+                        </div>
+                        
+                        <div class="instruction-card">
+                            <div class="instruction-icon">
+                                <i class="fas fa-desktop"></i>
+                            </div>
+                            <h4>Desktop Payment</h4>
+                            <p>On a cryptocurrency exchange or wallet website, look for the "Send" option and scan this QR code with your webcam.</p>
+                        </div>
+                        
+                        <div class="instruction-card">
+                            <div class="instruction-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <h4>Security Tips</h4>
+                            <p>Only share your QR code with trusted parties. This address can receive funds but cannot be used to access your wallet.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer fade-in" style="animation-delay: 0.3s;">
+            <p>CryptoSim - Educational Simulation for University Project</p>
+            <p>This is a test environment. No real cryptocurrencies are involved.</p>
+            <a href="/wallet" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back to Wallet
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+            menuToggle.innerHTML = sidebar.classList.contains('active') 
+                ? '<i class="fas fa-times"></i>' 
+                : '<i class="fas fa-bars"></i>';
+        });
+        
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth <= 1024) {
+                if (!sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                    menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+            }
+        });
+        
+        // Download QR Code
+        document.getElementById('downloadQR').addEventListener('click', function() {
+            const qrImage = document.querySelector('.qr-image img');
+            const link = document.createElement('a');
+            link.href = qrImage.src;
+            link.download = `cryptosim-wallet-qr-{{ user.username if user else 'user' }}.png`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showNotification('QR code downloaded successfully!', 'success');
+        });
+        
+        // Copy wallet address
+        document.getElementById('copyAddress').addEventListener('click', function() {
+            const address = document.getElementById('walletAddress').textContent;
+            navigator.clipboard.writeText(address).then(() => {
+                showNotification('Wallet address copied to clipboard!', 'success');
+            }).catch(err => {
+                showNotification('Failed to copy address', 'error');
+            });
+        });
+        
+        // Share QR code
+        document.getElementById('shareQR').addEventListener('click', function() {
+            const address = document.getElementById('walletAddress').textContent;
+            const qrImage = document.querySelector('.qr-image img').src;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'My CryptoSim Wallet QR Code',
+                    text: `My cryptocurrency wallet address: ${address}`,
+                    url: window.location.href
+                }).then(() => {
+                    showNotification('QR code shared successfully!', 'success');
+                }).catch(err => {
+                    showNotification('Sharing cancelled', 'info');
+                });
+            } else {
+                // Fallback: Copy address to clipboard
+                navigator.clipboard.writeText(address).then(() => {
+                    showNotification('Wallet address copied to clipboard for sharing!', 'success');
+                });
+            }
+        });
+        
+        // Show notification function
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: ${type === 'error' ? '#e74c3c' : type === 'success' ? '#2ecc71' : 'var(--black-light)'};
+                color: var(--white);
+                padding: 15px 20px;
+                border-radius: 12px;
+                border-left: 4px solid var(--primary-yellow);
+                box-shadow: var(--shadow);
+                z-index: 1000;
+                animation: slideInRight 0.3s ease forwards;
+                max-width: 300px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            `;
+            
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'error' ? 'exclamation-triangle' : type === 'success' ? 'check-circle' : 'info-circle'}" 
+                   style="color: var(--primary-yellow);"></i>
+                <span>${message}</span>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease forwards';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+        
+        // Add CSS for notification animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideOutRight {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Initialize animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate elements on scroll
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const fadeInOnScroll = () => {
+                fadeElements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
+                    
+                    if (elementTop < windowHeight - 100) {
+                        element.style.opacity = '1';
+                        element.style.transform = 'translateY(0)';
+                    }
+                });
+            };
+            
+            window.addEventListener('scroll', fadeInOnScroll);
+            fadeInOnScroll(); // Initial check
+            
+            // Add interactive hover effects
+            const instructionCards = document.querySelectorAll('.instruction-card');
+            instructionCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    const icon = this.querySelector('.instruction-icon');
+                    icon.style.transform = 'scale(1.1)';
+                    icon.style.backgroundColor = 'rgba(255, 215, 0, 0.2)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    const icon = this.querySelector('.instruction-icon');
+                    icon.style.transform = 'scale(1)';
+                    icon.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
+                });
+            });
+            
+            // QR code animation
+            const qrContainer = document.querySelector('.qr-image-container');
+            setInterval(() => {
+                qrContainer.style.animation = 'none';
+                setTimeout(() => {
+                    qrContainer.style.animation = 'pulse 2s infinite';
+                }, 10);
+            }, 2000);
+        });
+        
+        // Print QR code (optional feature)
+        function printQRCode() {
+            window.print();
+        }
+        
+        // Add print button if needed
+        const printBtn = document.createElement('button');
+        printBtn.className = 'qr-action-btn';
+        printBtn.style.marginTop = '10px';
+        printBtn.style.backgroundColor = 'rgba(149, 165, 166, 0.1)';
+        printBtn.style.color = '#95a5a6';
+        printBtn.innerHTML = '<i class="fas fa-print"></i> Print';
+        printBtn.onclick = printQRCode;
+        document.querySelector('.qr-actions').appendChild(printBtn);
+    </script>
+</body>
+</html>

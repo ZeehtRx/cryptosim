@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exchange | CryptoSim</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <style>
+        :root {
+            --primary-yellow: #FFD700;
+            --yellow-light: #FFF176;
+            --yellow-dark: #FBC02D;
+            --black: #1A1A1A;
+            --black-light: #2D2D2D;
+            --gray: #444444;
+            --gray-light: #666666;
+            --white: #FFFFFF;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--black);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+        
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 10px;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1000;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background-color: var(--black-light);
+            padding: 25px 0;
+            z-index: 100;
+            transition: var(--transition);
+            border-right: 1px solid rgba(255, 215, 0, 0.1);
+            overflow-y: auto;
+        }
+        
+        .logo {
+            padding: 0 25px;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(45deg, var(--primary-yellow), var(--yellow-dark));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            transform: rotate(45deg);
+            transition: var(--transition);
+        }
+        
+        .logo:hover .logo-icon {
+            transform: rotate(0deg);
+        }
+        
+        .logo-icon i {
+            color: var(--black);
+            font-size: 20px;
+            transform: rotate(-45deg);
+        }
+        
+        .logo-text h2 {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary-yellow), var(--yellow-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .logo-text p {
+            font-size: 11px;
+            color: var(--gray-light);
+        }
+        
+        .nav-links {
+            list-style: none;
+            padding: 0 15px;
+        }
+        
+        .nav-links li {
+            margin-bottom: 8px;
+        }
+        
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            color: var(--gray-light);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+        
+        .nav-links a:hover {
+            background-color: rgba(255, 215, 0, 0.1);
+            color: var(--white);
+        }
+        
+        .nav-links a.active {
+            background-color: rgba(255, 215, 0, 0.15);
+            color: var(--primary-yellow);
+            border-left: 4px solid var(--primary-yellow);
+        }
+        
+        .nav-links i {
+            width: 24px;
+            margin-right: 15px;
+            font-size: 18px;
+        }
+        
+        .user-info {
+            position: absolute;
+            bottom: 30px;
+            left: 0;
+            right: 0;
+            padding: 0 25px;
+        }
+        
+        .user-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 215, 0, 0.1);
+        }
+        
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, var(--primary-yellow), var(--yellow-dark));
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--black);
+            font-weight: bold;
+        }
+        
+        .user-email {
+            color: var(--gray-light);
+            font-size: 12px;
+            margin-top: 5px;
+            word-break: break-all;
+        }
+        
+        .logout-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: rgba(231, 76, 60, 0.1);
+            color: #e74c3c;
+            border: none;
+            border-radius: 10px;
+            margin-top: 15px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .logout-btn:hover {
+            background-color: rgba(231, 76, 60, 0.2);
+        }
+        
+        /* Main Content */
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+            transition: var(--transition);
+            min-height: 100vh;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .header-title h1 {
+            font-size: 32px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .header-title p {
+            color: var(--gray-light);
+            margin-top: 5px;
+        }
+        
+        .balance-card {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(251, 192, 45, 0.05));
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .balance-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary-yellow), var(--yellow-dark));
+        }
+        
+        .balance-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .balance-header h2 {
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .refresh-btn {
+            background: rgba(255, 215, 0, 0.1);
+            border: none;
+            color: var(--primary-yellow);
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .refresh-btn:hover {
+            background: rgba(255, 215, 0, 0.2);
+            transform: rotate(180deg);
+        }
+        
+        .balance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .balance-item {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            transition: var(--transition);
+        }
+        
+        .balance-item:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+            transform: translateY(-3px);
+        }
+        
+        .crypto-icon-large {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 22px;
+        }
+        
+        .btc-bg {
+            background-color: rgba(247, 147, 26, 0.1);
+            color: #f7931a;
+        }
+        
+        .eth-bg {
+            background-color: rgba(98, 126, 234, 0.1);
+            color: #627eea;
+        }
+        
+        .usd-bg {
+            background-color: rgba(46, 204, 113, 0.1);
+            color: #2ecc71;
+        }
+        
+        .balance-details h3 {
+            font-size: 16px;
+            margin-bottom: 5px;
+            color: var(--gray-light);
+        }
+        
+        .balance-amount {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+        
+        .balance-value {
+            font-size: 14px;
+            color: var(--gray-light);
+        }
+        
+        /* Exchange Container */
+        .exchange-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        @media (max-width: 1024px) {
+            .exchange-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .trade-card {
+            background-color: var(--black-light);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .trade-card h2 {
+            font-size: 22px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: var(--white);
+        }
+        
+        .select-wrapper {
+            position: relative;
+        }
+        
+        .select-wrapper select {
+            width: 100%;
+            padding: 16px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--white);
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            appearance: none;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .select-wrapper select:focus {
+            outline: none;
+            border-color: var(--primary-yellow);
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+        }
+        
+        .select-wrapper::after {
+            content: '\f078';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-light);
+            pointer-events: none;
+        }
+        
+        .input-group {
+            position: relative;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 16px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--white);
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary-yellow);
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+        }
+        
+        .input-group .crypto-symbol {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-light);
+            font-weight: 500;
+        }
+        
+        .price-info {
+            background-color: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .price-info div {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .price-info div span {
+            display: block;
+        }
+        
+        .price-label {
+            font-size: 12px;
+            color: var(--gray-light);
+            margin-bottom: 5px;
+        }
+        
+        .price-value {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .btn-trade {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
+        }
+        
+        .btn-buy {
+            background: linear-gradient(45deg, var(--primary-yellow), var(--yellow-dark));
+            color: var(--black);
+        }
+        
+        .btn-sell {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: var(--white);
+        }
+        
+        .btn-trade:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn-trade:active {
+            transform: translateY(0);
+        }
+        
+        .btn-trade:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        /* Loading animation */
+        .loader {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--white);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .quick-amount, .quick-amount-sell, .quick-buy {
+            padding: 8px 12px;
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            color: var(--primary-yellow);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: var(--transition);
+            border: none;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .quick-amount:hover, .quick-amount-sell:hover, .quick-buy:hover {
+            background: rgba(255, 215, 0, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .quick-buy {
+            padding: 8px 15px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        /* Market Data */
+        .market-data {
+            background-color: var(--black-light);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .market-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .market-header h2 {
+            font-size: 22px;
+        }
+        
+        .crypto-search {
+            padding: 10px 15px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--white);
+            font-family: 'Poppins', sans-serif;
+            width: 200px;
+        }
+        
+        .crypto-table {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            text-align: left;
+            padding: 15px;
+            color: var(--gray-light);
+            font-weight: 500;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            white-space: nowrap;
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        tr:hover {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+        
+        .crypto-name {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .crypto-symbol {
+            color: var(--gray-light);
+            font-size: 14px;
+        }
+        
+        .price-change {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .positive {
+            background-color: rgba(46, 204, 113, 0.1);
+            color: #2ecc71;
+        }
+        
+        .negative {
+            background-color: rgba(231, 76, 60, 0.1);
+            color: #e74c3c;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+                padding-top: 70px;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            .header-title h1 {
+                font-size: 24px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .balance-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .market-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .crypto-search {
+                width: 100%;
+            }
+            
+            th, td {
+                padding: 10px 8px;
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .trade-card {
+                padding: 20px;
+            }
+            
+            .balance-card {
+                padding: 20px;
+            }
+            
+            .exchange-container {
+                gap: 20px;
+            }
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 215, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Menu Toggle -->
+    <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-coins"></i>
+            </div>
+            <div class="logo-text">
+                <h2>CryptoSim</h2>
+                <p>Esa Unggul University</p>
+            </div>
+        </div>
+        
+        <ul class="nav-links">
+            <li><a href="/dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="/exchange" class="active"><i class="fas fa-exchange-alt"></i> Exchange</a></li>
+            <li><a href="/wallet"><i class="fas fa-wallet"></i> Wallet</a></li>
+            <li><a href="/ecommerce"><i class="fas fa-shopping-cart"></i> E-commerce</a></li>
+            <li><a href="/wallet/qr"><i class="fas fa-qrcode"></i> QR Code</a></li>
+            <li><a href="/generate_report"><i class="fas fa-file-pdf"></i> Reports</a></li>
+        </ul>
+        
+        <div class="user-info">
+            <div class="user-card">
+                <div class="user-avatar">
+                    {{ user.username[0]|upper if user and user.username else 'U' }}
+                </div>
+                <h4>{{ user.username if user else 'Guest' }}</h4>
+                <p class="user-email">{{ user.email if user and user.email else 'No email' }}</p>
+                <a href="/logout" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <div class="header">
+            <div class="header-title">
+                <h1><i class="fas fa-exchange-alt"></i> Crypto Exchange</h1>
+                <p>Trade cryptocurrencies instantly with simulated market prices</p>
+            </div>
+        </div>
+        
+        <!-- Balance Card -->
+        <div class="balance-card fade-in">
+            <div class="balance-header">
+                <h2><i class="fas fa-wallet"></i> My Balance</h2>
+                <button class="refresh-btn" id="refreshBalance">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+            </div>
+            <div class="balance-grid">
+                <div class="balance-item">
+                    <div class="crypto-icon-large btc-bg">
+                        <i class="fab fa-btc"></i>
+                    </div>
+                    <div class="balance-details">
+                        <h3>Bitcoin (BTC)</h3>
+                        <div class="balance-amount">{{ "%.6f"|format(wallet.btc_balance) }}</div>
+                        <div class="balance-value">${{ "%.2f"|format(wallet.btc_balance * prices.BTC) }}</div>
+                    </div>
+                </div>
+                
+                <div class="balance-item">
+                    <div class="crypto-icon-large eth-bg">
+                        <i class="fab fa-ethereum"></i>
+                    </div>
+                    <div class="balance-details">
+                        <h3>Ethereum (ETH)</h3>
+                        <div class="balance-amount">{{ "%.6f"|format(wallet.eth_balance) }}</div>
+                        <div class="balance-value">${{ "%.2f"|format(wallet.eth_balance * prices.ETH) }}</div>
+                    </div>
+                </div>
+                
+                <div class="balance-item">
+                    <div class="crypto-icon-large usd-bg">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="balance-details">
+                        <h3>US Dollar (USD)</h3>
+                        <div class="balance-amount">${{ "%.2f"|format(wallet.usd_balance) }}</div>
+                        <div class="balance-value">Available for trading</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Trading Interface -->
+        <div class="exchange-container">
+            <!-- Buy Card -->
+            <div class="trade-card fade-in">
+                <h2><i class="fas fa-shopping-cart"></i> Buy Crypto</h2>
+                
+                <div class="form-group">
+                    <label class="form-label">Select Cryptocurrency</label>
+                    <div class="select-wrapper">
+                        <select id="buyCryptoType">
+                            <option value="BTC">Bitcoin (BTC) - ${{ "%.2f"|format(prices.BTC) }}</option>
+                            <option value="ETH">Ethereum (ETH) - ${{ "%.2f"|format(prices.ETH) }}</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Amount to Buy</label>
+                    <div class="input-group">
+                        <input type="number" id="buyAmount" step="0.001" min="0.001" placeholder="0.01">
+                        <span class="crypto-symbol" id="buySymbol">BTC</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                        <button type="button" class="quick-amount" data-amount="0.01">0.01</button>
+                        <button type="button" class="quick-amount" data-amount="0.1">0.1</button>
+                        <button type="button" class="quick-amount" data-amount="0.5">0.5</button>
+                        <button type="button" class="quick-amount" data-amount="1">1</button>
+                    </div>
+                </div>
+                
+                <div class="price-info">
+                    <div>
+                        <span class="price-label">Current Price</span>
+                        <span class="price-value" id="buyPrice">${{ "%.2f"|format(prices.BTC) }}</span>
+                    </div>
+                    <div>
+                        <span class="price-label">Total Cost</span>
+                        <span class="price-value" id="buyTotal">$0.00</span>
+                    </div>
+                </div>
+                
+                <button class="btn-trade btn-buy" id="buyButton">
+                    <i class="fas fa-arrow-up"></i>
+                    <span id="buyButtonText">Buy Now</span>
+                    <div class="loader" id="buyLoader"></div>
+                </button>
+            </div>
+            
+            <!-- Sell Card -->
+            <div class="trade-card fade-in" style="animation-delay: 0.1s;">
+                <h2><i class="fas fa-coins"></i> Sell Crypto</h2>
+                
+                <div class="form-group">
+                    <label class="form-label">Select Cryptocurrency</label>
+                    <div class="select-wrapper">
+                        <select id="sellCryptoType">
+                            <option value="BTC">Bitcoin (BTC) - ${{ "%.2f"|format(prices.BTC) }}</option>
+                            <option value="ETH">Ethereum (ETH) - ${{ "%.2f"|format(prices.ETH) }}</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Amount to Sell</label>
+                    <div class="input-group">
+                        <input type="number" id="sellAmount" step="0.001" min="0.001" placeholder="0.01">
+                        <span class="crypto-symbol" id="sellSymbol">BTC</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                        <button type="button" class="quick-amount-sell" data-amount="0.01">0.01</button>
+                        <button type="button" class="quick-amount-sell" data-amount="0.1">0.1</button>
+                        <button type="button" class="quick-amount-sell" data-amount="0.5">0.5</button>
+                        <button type="button" class="quick-amount-sell" data-amount="1">1</button>
+                    </div>
+                </div>
+                
+                <div class="price-info">
+                    <div>
+                        <span class="price-label">Current Price</span>
+                        <span class="price-value" id="sellPrice">${{ "%.2f"|format(prices.BTC) }}</span>
+                    </div>
+                    <div>
+                        <span class="price-label">Total Receive</span>
+                        <span class="price-value" id="sellTotal">$0.00</span>
+                    </div>
+                </div>
+                
+                <button class="btn-trade btn-sell" id="sellButton">
+                    <i class="fas fa-arrow-down"></i>
+                    <span id="sellButtonText">Sell Now</span>
+                    <div class="loader" id="sellLoader"></div>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Market Data -->
+        <div class="market-data fade-in" style="animation-delay: 0.2s;">
+            <div class="market-header">
+                <h2><i class="fas fa-chart-line"></i> Market Overview</h2>
+                <input type="text" class="crypto-search" placeholder="Search cryptocurrency...">
+            </div>
+            
+            <div class="crypto-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cryptocurrency</th>
+                            <th>Price (USD)</th>
+                            <th>24h Change</th>
+                            <th>Market Cap</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="crypto-name">
+                                    <div class="crypto-icon-large btc-bg" style="width: 40px; height: 40px; font-size: 18px;">
+                                        <i class="fab fa-btc"></i>
+                                    </div>
+                                    <div>
+                                        <div>Bitcoin</div>
+                                        <div class="crypto-symbol">BTC</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>${{ "%.2f"|format(prices.BTC) }}</td>
+                            <td><span class="price-change positive">+2.5%</span></td>
+                            <td>$920B</td>
+                            <td>
+                                <button class="quick-buy" data-crypto="BTC" data-amount="0.01">
+                                    <i class="fas fa-bolt"></i> Quick Buy
+                                </button>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td>
+                                <div class="crypto-name">
+                                    <div class="crypto-icon-large eth-bg" style="width: 40px; height: 40px; font-size: 18px;">
+                                        <i class="fab fa-ethereum"></i>
+                                    </div>
+                                    <div>
+                                        <div>Ethereum</div>
+                                        <div class="crypto-symbol">ETH</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>${{ "%.2f"|format(prices.ETH) }}</td>
+                            <td><span class="price-change positive">+1.8%</span></td>
+                            <td>$220B</td>
+                            <td>
+                                <button class="quick-buy" data-crypto="ETH" data-amount="0.1">
+                                    <i class="fas fa-bolt"></i> Quick Buy
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+            menuToggle.innerHTML = sidebar.classList.contains('active') 
+                ? '<i class="fas fa-times"></i>' 
+                : '<i class="fas fa-bars"></i>';
+        });
+        
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth <= 1024) {
+                if (!sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                    menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+            }
+        });
+        
+        // Crypto prices
+        const prices = {
+            BTC: {{ prices.BTC }},
+            ETH: {{ prices.ETH }}
+        };
+        
+        // User wallet balances
+        const walletBalances = {
+            BTC: {{ wallet.btc_balance }},
+            ETH: {{ wallet.eth_balance }},
+            USD: {{ wallet.usd_balance }}
+        };
+        
+        console.log('Wallet balances loaded:', walletBalances);
+        console.log('Current prices:', prices);
+        
+        // Update buy form when crypto type changes
+        document.getElementById('buyCryptoType').addEventListener('change', function() {
+            const crypto = this.value;
+            document.getElementById('buySymbol').textContent = crypto;
+            document.getElementById('buyPrice').textContent = '$' + prices[crypto].toFixed(2);
+            updateBuyTotal();
+        });
+        
+        // Update sell form when crypto type changes
+        document.getElementById('sellCryptoType').addEventListener('change', function() {
+            const crypto = this.value;
+            document.getElementById('sellSymbol').textContent = crypto;
+            document.getElementById('sellPrice').textContent = '$' + prices[crypto].toFixed(2);
+            updateSellTotal();
+        });
+        
+        // Update buy total when amount changes
+        document.getElementById('buyAmount').addEventListener('input', updateBuyTotal);
+        
+        // Update sell total when amount changes
+        document.getElementById('sellAmount').addEventListener('input', updateSellTotal);
+        
+        // Quick amount buttons for buy
+        document.querySelectorAll('.quick-amount').forEach(button => {
+            button.addEventListener('click', function() {
+                document.getElementById('buyAmount').value = this.dataset.amount;
+                updateBuyTotal();
+            });
+        });
+        
+        // Quick amount buttons for sell
+        document.querySelectorAll('.quick-amount-sell').forEach(button => {
+            button.addEventListener('click', function() {
+                document.getElementById('sellAmount').value = this.dataset.amount;
+                updateSellTotal();
+            });
+        });
+        
+        // Quick buy from market table
+        document.querySelectorAll('.quick-buy').forEach(button => {
+            button.addEventListener('click', function() {
+                const crypto = this.dataset.crypto;
+                const amount = this.dataset.amount;
+                
+                document.getElementById('buyCryptoType').value = crypto;
+                document.getElementById('buyAmount').value = amount;
+                document.getElementById('buySymbol').textContent = crypto;
+                document.getElementById('buyPrice').textContent = '$' + prices[crypto].toFixed(2);
+                updateBuyTotal();
+                
+                document.getElementById('buyAmount').scrollIntoView({ behavior: 'smooth' });
+                document.getElementById('buyAmount').focus();
+            });
+        });
+        
+        function updateBuyTotal() {
+            const crypto = document.getElementById('buyCryptoType').value;
+            const amount = parseFloat(document.getElementById('buyAmount').value) || 0;
+            const total = amount * prices[crypto];
+            document.getElementById('buyTotal').textContent = '$' + total.toFixed(2);
+        }
+        
+        function updateSellTotal() {
+            const crypto = document.getElementById('sellCryptoType').value;
+            const amount = parseFloat(document.getElementById('sellAmount').value) || 0;
+            const total = amount * prices[crypto];
+            document.getElementById('sellTotal').textContent = '$' + total.toFixed(2);
+        }
+        
+        // Buy button handler
+        document.getElementById('buyButton').addEventListener('click', async function() {
+            const crypto = document.getElementById('buyCryptoType').value;
+            const amount = parseFloat(document.getElementById('buyAmount').value);
+            
+            if (!amount || amount <= 0) {
+                showNotification('Please enter a valid amount', 'error');
+                return;
+            }
+            
+            // Show loading
+            const buttonText = document.getElementById('buyButtonText');
+            const loader = document.getElementById('buyLoader');
+            const buttonIcon = this.querySelector('i');
+            
+            buttonText.textContent = 'Processing...';
+            loader.style.display = 'block';
+            buttonIcon.style.display = 'none';
+            this.disabled = true;
+            
+            try {
+                console.log('Sending buy request:', { crypto_type: crypto, amount: amount });
+                
+                const response = await fetch('/api/buy_crypto', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ crypto_type: crypto, amount: amount })
+                });
+                
+                const result = await response.json();
+                console.log('Buy response:', result);
+                
+                if (result.success) {
+                    showNotification(`Successfully purchased ${amount} ${crypto}`, 'success');
+                    
+                    // Update button UI untuk success
+                    buttonText.textContent = 'Purchased!';
+                    loader.style.display = 'none';
+                    buttonIcon.style.display = 'inline-block';
+                    buttonIcon.className = 'fas fa-check';
+                    
+                    // Reset form
+                    document.getElementById('buyAmount').value = '';
+                    updateBuyTotal();
+                    
+                    // Refresh page after delay
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1500);
+                } else {
+                    showNotification('Error: ' + result.error, 'error');
+                    
+                    // Reset button
+                    buttonText.textContent = 'Buy Now';
+                    loader.style.display = 'none';
+                    buttonIcon.style.display = 'inline-block';
+                    this.disabled = false;
+                }
+            } catch (error) {
+                console.error('Buy error:', error);
+                showNotification('Network error. Please try again.', 'error');
+                
+                // Reset button
+                buttonText.textContent = 'Buy Now';
+                loader.style.display = 'none';
+                buttonIcon.style.display = 'inline-block';
+                this.disabled = false;
+            }
+        });
+        
+        // Sell button handler - YANG DIREVISI
+        document.getElementById('sellButton').addEventListener('click', async function() {
+            const crypto = document.getElementById('sellCryptoType').value;
+            const amount = parseFloat(document.getElementById('sellAmount').value);
+            
+            console.log('Sell button clicked:', { crypto, amount });
+            console.log('Available balance:', walletBalances[crypto]);
+            
+            if (!amount || amount <= 0) {
+                showNotification('Please enter a valid amount', 'error');
+                return;
+            }
+            
+            // Check if user has enough balance
+            const balance = walletBalances[crypto];
+            if (amount > balance) {
+                showNotification(`Insufficient ${crypto} balance. You have ${balance.toFixed(6)} ${crypto}, trying to sell ${amount} ${crypto}`, 'error');
+                return;
+            }
+            
+            // Show loading
+            const buttonText = document.getElementById('sellButtonText');
+            const loader = document.getElementById('sellLoader');
+            const buttonIcon = this.querySelector('i');
+            
+            buttonText.textContent = 'Processing...';
+            loader.style.display = 'block';
+            buttonIcon.style.display = 'none';
+            this.disabled = true;
+            
+            try {
+                console.log('Sending sell request to /api/sell_crypto:', { 
+                    crypto_type: crypto, 
+                    amount: amount 
+                });
+                
+                const response = await fetch('/api/sell_crypto', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        crypto_type: crypto, 
+                        amount: amount 
+                    })
+                });
+                
+                console.log('Response status:', response.status);
+                const result = await response.json();
+                console.log('Sell response:', result);
+                
+                if (result.success) {
+                    const usdValue = amount * prices[crypto];
+                    showNotification(`Successfully sold ${amount} ${crypto} for $${usdValue.toFixed(2)}`, 'success');
+                    
+                    // Update button UI untuk success
+                    buttonText.textContent = 'Sold!';
+                    loader.style.display = 'none';
+                    buttonIcon.style.display = 'inline-block';
+                    buttonIcon.className = 'fas fa-check';
+                    
+                    // Reset form
+                    document.getElementById('sellAmount').value = '';
+                    updateSellTotal();
+                    
+                    // Refresh page after delay
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1500);
+                } else {
+                    showNotification('Error: ' + result.error, 'error');
+                    
+                    // Reset button
+                    buttonText.textContent = 'Sell Now';
+                    loader.style.display = 'none';
+                    buttonIcon.style.display = 'inline-block';
+                    this.disabled = false;
+                }
+            } catch (error) {
+                console.error('Sell error details:', error);
+                showNotification('Network error: ' + error.message, 'error');
+                
+                // Reset button
+                buttonText.textContent = 'Sell Now';
+                loader.style.display = 'none';
+                buttonIcon.style.display = 'inline-block';
+                this.disabled = false;
+            }
+        });
+        
+        // Refresh balance button
+        document.getElementById('refreshBalance').addEventListener('click', function() {
+            this.style.transform = 'rotate(180deg)';
+            setTimeout(() => {
+                location.reload();
+            }, 500);
+        });
+        
+        // Crypto search
+        document.querySelector('.crypto-search').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const rows = document.querySelectorAll('tbody tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        });
+        
+        // Show notification function
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: ${type === 'error' ? '#e74c3c' : type === 'success' ? '#2ecc71' : 'var(--black-light)'};
+                color: var(--white);
+                padding: 15px 20px;
+                border-radius: 12px;
+                border-left: 4px solid var(--primary-yellow);
+                box-shadow: var(--shadow);
+                z-index: 1000;
+                animation: slideInRight 0.3s ease forwards;
+                max-width: 300px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            `;
+            
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'error' ? 'exclamation-triangle' : type === 'success' ? 'check-circle' : 'info-circle'}" 
+                   style="color: var(--primary-yellow);"></i>
+                <span>${message}</span>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease forwards';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+        
+        // Add CSS for notification animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideOutRight {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Debug function untuk testing endpoint
+        async function testSellEndpoint() {
+            console.log('Testing sell endpoint...');
+            try {
+                const testData = {
+                    crypto_type: 'BTC',
+                    amount: 0.01
+                };
+                
+                const response = await fetch('/api/sell_crypto', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(testData)
+                });
+                
+                console.log('Test response status:', response.status);
+                const result = await response.json();
+                console.log('Test response data:', result);
+                
+                return result;
+            } catch (error) {
+                console.error('Test error:', error);
+                return { error: error.message };
+            }
+        }
+        
+        // Expose test function untuk debugging di console browser
+        window.testSell = testSellEndpoint;
+        
+        // Initialize animations
+        document.addEventListener('DOMContentLoaded', function() {
+            updateBuyTotal();
+            updateSellTotal();
+            
+            // Animate elements on scroll
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const fadeInOnScroll = () => {
+                fadeElements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
+                    
+                    if (elementTop < windowHeight - 100) {
+                        element.style.opacity = '1';
+                        element.style.transform = 'translateY(0)';
+                    }
+                });
+            };
+            
+            window.addEventListener('scroll', fadeInOnScroll);
+            fadeInOnScroll(); // Initial check
+            
+            // Auto-refresh prices every 30 seconds
+            setInterval(() => {
+                // Simulate price changes for demo
+                const change = (Math.random() - 0.5) * 0.02; // ±1%
+                prices.BTC = prices.BTC * (1 + change);
+                prices.ETH = prices.ETH * (1 + change);
+                
+                // Update UI
+                document.getElementById('buyPrice').textContent = '$' + prices[document.getElementById('buyCryptoType').value].toFixed(2);
+                document.getElementById('sellPrice').textContent = '$' + prices[document.getElementById('sellCryptoType').value].toFixed(2);
+                updateBuyTotal();
+                updateSellTotal();
+                
+                // Update market table
+                document.querySelectorAll('tbody tr:nth-child(1) td:nth-child(2)')[0].textContent = '$' + prices.BTC.toFixed(2);
+                document.querySelectorAll('tbody tr:nth-child(2) td:nth-child(2)')[0].textContent = '$' + prices.ETH.toFixed(2);
+                
+                showNotification('Market prices updated', 'info');
+            }, 30000);
+            
+            console.log('Exchange page initialized successfully');
+            console.log('Test sell function available: window.testSell()');
+        });
+    </script>
+</body>
+</html>

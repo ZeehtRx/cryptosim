@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallet | CryptoEco</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <style>
+        :root {
+            --primary-yellow: #FFD700;
+            --yellow-light: #FFF176;
+            --yellow-dark: #FBC02D;
+            --black: #1A1A1A;
+            --black-light: #2D2D2D;
+            --gray: #444444;
+            --gray-light: #666666;
+            --white: #FFFFFF;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--black);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+        
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 10px;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1000;
+        }
+        
+        /* Sidebar */
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background-color: var(--black-light);
+            padding: 25px 0;
+            z-index: 100;
+            transition: var(--transition);
+            border-right: 1px solid rgba(255, 215, 0, 0.1);
+            overflow-y: auto;
+        }
+        
+        .logo {
+            padding: 0 25px;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(45deg, var(--primary-yellow), var(--yellow-dark));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            transform: rotate(45deg);
+            transition: var(--transition);
+        }
+        
+        .logo:hover .logo-icon {
+            transform: rotate(0deg);
+        }
+        
+        .logo-icon i {
+            color: var(--black);
+            font-size: 20px;
+            transform: rotate(-45deg);
+        }
+        
+        .logo-text h2 {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary-yellow), var(--yellow-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .logo-text p {
+            font-size: 11px;
+            color: var(--gray-light);
+        }
+        
+        .nav-links {
+            list-style: none;
+            padding: 0 15px;
+        }
+        
+        .nav-links li {
+            margin-bottom: 8px;
+        }
+        
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            color: var(--gray-light);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+        
+        .nav-links a:hover {
+            background-color: rgba(255, 215, 0, 0.1);
+            color: var(--white);
+        }
+        
+        .nav-links a.active {
+            background-color: rgba(255, 215, 0, 0.15);
+            color: var(--primary-yellow);
+            border-left: 4px solid var(--primary-yellow);
+        }
+        
+        .nav-links i {
+            width: 24px;
+            margin-right: 15px;
+            font-size: 18px;
+        }
+        
+        .user-info {
+            position: absolute;
+            bottom: 30px;
+            left: 0;
+            right: 0;
+            padding: 0 25px;
+        }
+        
+        .user-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 215, 0, 0.1);
+        }
+        
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, var(--primary-yellow), var(--yellow-dark));
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--black);
+            font-weight: bold;
+        }
+        
+        .user-email {
+            color: var(--gray-light);
+            font-size: 12px;
+            margin-top: 5px;
+            word-break: break-all;
+        }
+        
+        .logout-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: rgba(231, 76, 60, 0.1);
+            color: #e74c3c;
+            border: none;
+            border-radius: 10px;
+            margin-top: 15px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .logout-btn:hover {
+            background-color: rgba(231, 76, 60, 0.2);
+        }
+        
+        /* Main Content */
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+            transition: var(--transition);
+            min-height: 100vh;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .header-title h1 {
+            font-size: 32px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .header-title p {
+            color: var(--gray-light);
+            margin-top: 5px;
+        }
+        
+        .wallet-address-card {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(251, 192, 45, 0.05));
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .wallet-address-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary-yellow), var(--yellow-dark));
+        }
+        
+        .address-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .address-header h2 {
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .address-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .address-btn {
+            padding: 10px 20px;
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            color: var(--primary-yellow);
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .address-btn:hover {
+            background: rgba(255, 215, 0, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .address-display {
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 18px;
+            text-align: center;
+            letter-spacing: 1px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            word-break: break-all;
+        }
+        
+        .qr-preview {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .qr-preview img {
+            width: 150px;
+            height: 150px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            padding: 10px;
+            background-color: white;
+        }
+        
+        .qr-preview p {
+            margin-top: 10px;
+            color: var(--gray-light);
+            font-size: 14px;
+        }
+        
+        /* Balance Cards */
+        .balance-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .balance-card {
+            background-color: var(--black-light);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--transition);
+        }
+        
+        .balance-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 215, 0, 0.2);
+            box-shadow: var(--shadow);
+        }
+        
+        .balance-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .balance-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 24px;
+        }
+        
+        .btc-balance .balance-icon {
+            background-color: rgba(247, 147, 26, 0.1);
+            color: #f7931a;
+        }
+        
+        .eth-balance .balance-icon {
+            background-color: rgba(98, 126, 234, 0.1);
+            color: #627eea;
+        }
+        
+        .usd-balance .balance-icon {
+            background-color: rgba(46, 204, 113, 0.1);
+            color: #2ecc71;
+        }
+        
+        .balance-info h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
+            color: var(--gray-light);
+        }
+        
+        .balance-amount {
+            font-size: 28px;
+            font-weight: 700;
+        }
+        
+        .balance-value {
+            color: var(--gray-light);
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .balance-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .send-btn {
+            background: rgba(52, 152, 219, 0.1);
+            color: #3498db;
+            border: 1px solid rgba(52, 152, 219, 0.2);
+        }
+        
+        .receive-btn {
+            background: rgba(46, 204, 113, 0.1);
+            color: #2ecc71;
+            border: 1px solid rgba(46, 204, 113, 0.2);
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        /* Transactions */
+        .transactions-section {
+            background-color: var(--black-light);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .transactions-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .transactions-header h2 {
+            font-size: 22px;
+        }
+        
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .filter-btn {
+            padding: 8px 16px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--gray-light);
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+        
+        .filter-btn.active {
+            background-color: rgba(255, 215, 0, 0.1);
+            color: var(--primary-yellow);
+            border-color: rgba(255, 215, 0, 0.3);
+        }
+        
+        .filter-btn:hover:not(.active) {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+        }
+        
+        .transactions-list {
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        
+        .transaction-item {
+            background-color: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .transaction-item:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            transform: translateX(5px);
+        }
+        
+        .transaction-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 20px;
+        }
+        
+        .transaction-buy .transaction-icon {
+            background-color: rgba(46, 204, 113, 0.1);
+            color: #2ecc71;
+        }
+        
+        .transaction-sell .transaction-icon {
+            background-color: rgba(231, 76, 60, 0.1);
+            color: #e74c3c;
+        }
+        
+        .transaction-transfer .transaction-icon {
+            background-color: rgba(52, 152, 219, 0.1);
+            color: #3498db;
+        }
+        
+        .transaction-details {
+            flex: 1;
+        }
+        
+        .transaction-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .transaction-meta {
+            color: var(--gray-light);
+            font-size: 13px;
+            display: flex;
+            gap: 15px;
+        }
+        
+        .transaction-amount {
+            font-weight: 700;
+            font-size: 18px;
+        }
+        
+        .transaction-positive {
+            color: #2ecc71;
+        }
+        
+        .transaction-negative {
+            color: #e74c3c;
+        }
+        
+        .no-transactions {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--gray-light);
+        }
+        
+        .no-transactions i {
+            font-size: 48px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+                padding-top: 70px;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            .header-title h1 {
+                font-size: 24px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .balance-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .address-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .address-btn {
+                justify-content: center;
+            }
+            
+            .transactions-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .filter-buttons {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .transaction-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .transaction-icon {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            
+            .transaction-meta {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .wallet-address-card {
+                padding: 20px;
+            }
+            
+            .address-display {
+                font-size: 14px;
+                padding: 15px;
+            }
+            
+            .balance-card {
+                padding: 20px;
+            }
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 215, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Menu Toggle -->
+    <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-coins"></i>
+            </div>
+            <div class="logo-text">
+                <h2>CryptoSim</h2>
+                <p>Esa Unggul University</p>
+            </div>
+        </div>
+        
+        <ul class="nav-links">
+            <li><a href="/dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="/exchange"><i class="fas fa-exchange-alt"></i> Exchange</a></li>
+            <li><a href="/wallet" class="active"><i class="fas fa-wallet"></i> Wallet</a></li>
+            <li><a href="/ecommerce"><i class="fas fa-shopping-cart"></i> E-commerce</a></li>
+            <li><a href="/wallet/qr"><i class="fas fa-qrcode"></i> QR Code</a></li>
+            <li><a href="/generate_report"><i class="fas fa-file-pdf"></i> Reports</a></li>
+        </ul>
+        
+        <div class="user-info">
+            <div class="user-card">
+                <div class="user-avatar">
+                    {{ user.username[0]|upper if user and user.username else 'U' }}
+                </div>
+                <h4>{{ user.username if user else 'Guest' }}</h4>
+                <a href="/logout" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <div class="header">
+            <div class="header-title">
+                <h1><i class="fas fa-wallet"></i> Digital Wallet</h1>
+                <p>Manage your cryptocurrency assets and transaction history</p>
+            </div>
+        </div>
+        
+        <!-- Wallet Address Card -->
+        <div class="wallet-address-card fade-in">
+            <div class="address-header">
+                <h2><i class="fas fa-address-card"></i> Wallet Address</h2>
+                <div class="address-actions">
+                    <button class="address-btn" onclick="copyAddress()">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
+                    <a href="/wallet/qr" class="address-btn">
+                        <i class="fas fa-qrcode"></i> QR Code
+                    </a>
+                    <button class="address-btn" onclick="shareAddress()">
+                        <i class="fas fa-share-alt"></i> Share
+                    </button>
+                </div>
+            </div>
+            
+            <div class="address-display" id="walletAddress">
+                {{ wallet.wallet_address }}
+            </div>
+            
+            <div class="qr-preview">
+                <img src="{{ qr_path }}" alt="QR Code">
+                <p>Scan to receive payments</p>
+            </div>
+        </div>
+        
+        <!-- Balance Cards -->
+        <div class="balance-cards">
+            <div class="balance-card btc-balance fade-in">
+                <div class="balance-header">
+                    <div class="balance-icon">
+                        <i class="fab fa-btc"></i>
+                    </div>
+                    <div class="balance-info">
+                        <h3>Bitcoin (BTC)</h3>
+                        <div class="balance-amount">{{ "%.6f"|format(wallet.btc_balance) }}</div>
+                        <div class="balance-value">${{ "%.2f"|format(wallet.btc_balance * prices.BTC) }}</div>
+                    </div>
+                </div>
+                <div class="balance-actions">
+                    <button class="action-btn send-btn" onclick="sendCrypto('BTC')">
+                        <i class="fas fa-paper-plane"></i> Send
+                    </button>
+                    <button class="action-btn receive-btn" onclick="receiveCrypto('BTC')">
+                        <i class="fas fa-qrcode"></i> Receive
+                    </button>
+                </div>
+            </div>
+            
+            <div class="balance-card eth-balance fade-in" style="animation-delay: 0.1s;">
+                <div class="balance-header">
+                    <div class="balance-icon">
+                        <i class="fab fa-ethereum"></i>
+                    </div>
+                    <div class="balance-info">
+                        <h3>Ethereum (ETH)</h3>
+                        <div class="balance-amount">{{ "%.6f"|format(wallet.eth_balance) }}</div>
+                        <div class="balance-value">${{ "%.2f"|format(wallet.eth_balance * prices.ETH) }}</div>
+                    </div>
+                </div>
+                <div class="balance-actions">
+                    <button class="action-btn send-btn" onclick="sendCrypto('ETH')">
+                        <i class="fas fa-paper-plane"></i> Send
+                    </button>
+                    <button class="action-btn receive-btn" onclick="receiveCrypto('ETH')">
+                        <i class="fas fa-qrcode"></i> Receive
+                    </button>
+                </div>
+            </div>
+            
+            <div class="balance-card usd-balance fade-in" style="animation-delay: 0.2s;">
+                <div class="balance-header">
+                    <div class="balance-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="balance-info">
+                        <h3>US Dollar (USD)</h3>
+                        <div class="balance-amount">${{ "%.2f"|format(wallet.usd_balance) }}</div>
+                        <div class="balance-value">Available for trading</div>
+                    </div>
+                </div>
+                <div class="balance-actions">
+                    <button class="action-btn send-btn" onclick="depositUSD()">
+                        <i class="fas fa-plus-circle"></i> Deposit
+                    </button>
+                    <button class="action-btn receive-btn" onclick="withdrawUSD()">
+                        <i class="fas fa-minus-circle"></i> Withdraw
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Transactions Section -->
+        <div class="transactions-section fade-in" style="animation-delay: 0.3s;">
+            <div class="transactions-header">
+                <h2><i class="fas fa-history"></i> Transaction History</h2>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="buy">Buy</button>
+                    <button class="filter-btn" data-filter="sell">Sell</button>
+                    <button class="filter-btn" data-filter="transfer">Transfer</button>
+                </div>
+            </div>
+            
+            <div class="transactions-list" id="transactionsList">
+                {% if transactions %}
+                    {% for t in transactions %}
+                    <div class="transaction-item {{ 'transaction-buy' if t.from_user == 0 else 'transaction-transfer' if t.to_user == 999 else 'transaction-sell' }}" 
+                         data-type="{{ 'buy' if t.from_user == 0 else 'transfer' if t.to_user == 999 else 'sell' }}">
+                        <div class="transaction-icon">
+                            {% if t.from_user == 0 %}
+                                <i class="fas fa-shopping-cart"></i>
+                            {% elif t.to_user == 999 %}
+                                <i class="fas fa-shopping-bag"></i>
+                            {% else %}
+                                <i class="fas fa-exchange-alt"></i>
+                            {% endif %}
+                        </div>
+                        <div class="transaction-details">
+                            <div class="transaction-title">
+                                {% if t.from_user == 0 %}
+                                    Bought {{ t.crypto_type }}
+                                {% elif t.to_user == 999 %}
+                                    E-commerce Purchase
+                                {% else %}
+                                    {{ t.crypto_type }} Transfer
+                                {% endif %}
+                            </div>
+                            <div class="transaction-meta">
+                                <span><i class="far fa-clock"></i> {{ t.timestamp.strftime('%d %b %Y, %H:%M') }}</span>
+                                <span>ID: {{ t.transaction_id[:8] }}...</span>
+                                {% if t.status %}
+                                <span class="status-badge {{ 'status-completed' if t.status == 'completed' else 'status-pending' }}">
+                                    {{ t.status }}
+                                </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="transaction-amount {{ 'transaction-positive' if t.to_user == session.user_id|int else 'transaction-negative' }}">
+                            {% if t.from_user == 0 %}
+                                +{{ "%.6f"|format(t.amount) }} {{ t.crypto_type }}
+                            {% else %}
+                                -{{ "%.6f"|format(t.amount) }} {{ t.crypto_type }}
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-transactions">
+                        <i class="fas fa-exchange-alt"></i>
+                        <h3>No transactions yet</h3>
+                        <p>Start trading on the exchange or shopping in the e-commerce store</p>
+                        <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: center;">
+                            <a href="/exchange" class="address-btn">
+                                <i class="fas fa-exchange-alt"></i> Go to Exchange
+                            </a>
+                            <a href="/ecommerce" class="address-btn">
+                                <i class="fas fa-shopping-cart"></i> Go Shopping
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+            menuToggle.innerHTML = sidebar.classList.contains('active') 
+                ? '<i class="fas fa-times"></i>' 
+                : '<i class="fas fa-bars"></i>';
+        });
+        
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth <= 1024) {
+                if (!sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                    menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+            }
+        });
+        
+        // Copy wallet address to clipboard
+        function copyAddress() {
+            const address = document.getElementById('walletAddress').textContent;
+            navigator.clipboard.writeText(address).then(() => {
+                showNotification('Wallet address copied to clipboard!', 'success');
+            }).catch(err => {
+                showNotification('Failed to copy address', 'error');
+            });
+        }
+        
+        // Share wallet address
+        function shareAddress() {
+            const address = document.getElementById('walletAddress').textContent;
+            if (navigator.share) {
+                navigator.share({
+                    title: 'My CryptoSim Wallet Address',
+                    text: `My wallet address: ${address}`,
+                    url: window.location.href
+                });
+            } else {
+                copyAddress();
+            }
+        }
+        
+        // Send crypto function
+        function sendCrypto(crypto) {
+            showNotification(`Send ${crypto} feature coming soon!`, 'info');
+        }
+        
+        // Receive crypto function
+        function receiveCrypto(crypto) {
+            showNotification(`Scan QR code to receive ${crypto}`, 'info');
+        }
+        
+        // Deposit USD
+        function depositUSD() {
+            showNotification('Deposit feature for simulation only', 'info');
+        }
+        
+        // Withdraw USD
+        function withdrawUSD() {
+            showNotification('Withdrawal feature for simulation only', 'info');
+        }
+        
+        // Filter transactions
+        document.querySelectorAll('.filter-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                // Update active button
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                const filter = this.dataset.filter;
+                const transactions = document.querySelectorAll('.transaction-item');
+                
+                transactions.forEach(transaction => {
+                    if (filter === 'all' || transaction.dataset.type === filter) {
+                        transaction.style.display = 'flex';
+                    } else {
+                        transaction.style.display = 'none';
+                    }
+                });
+            });
+        });
+        
+        // Show notification function
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: ${type === 'error' ? '#e74c3c' : type === 'success' ? '#2ecc71' : 'var(--black-light)'};
+                color: var(--white);
+                padding: 15px 20px;
+                border-radius: 12px;
+                border-left: 4px solid var(--primary-yellow);
+                box-shadow: var(--shadow);
+                z-index: 1000;
+                animation: slideInRight 0.3s ease forwards;
+                max-width: 300px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            `;
+            
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'error' ? 'exclamation-triangle' : type === 'success' ? 'check-circle' : 'info-circle'}" 
+                   style="color: var(--primary-yellow);"></i>
+                <span>${message}</span>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease forwards';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+        
+        // Add CSS for notification animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideOutRight {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+            
+            .status-badge {
+                display: inline-flex;
+                align-items: center;
+                padding: 4px 8px;
+                border-radius: 20px;
+                font-size: 11px;
+                font-weight: 500;
+            }
+            
+            .status-completed {
+                background-color: rgba(46, 204, 113, 0.1);
+                color: #2ecc71;
+            }
+            
+            .status-pending {
+                background-color: rgba(241, 196, 15, 0.1);
+                color: #f1c40f;
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Initialize animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate elements on scroll
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const fadeInOnScroll = () => {
+                fadeElements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
+                    
+                    if (elementTop < windowHeight - 100) {
+                        element.style.opacity = '1';
+                        element.style.transform = 'translateY(0)';
+                    }
+                });
+            };
+            
+            window.addEventListener('scroll', fadeInOnScroll);
+            fadeInOnScroll(); // Initial check
+            
+            // Auto-refresh transactions every 30 seconds
+            setInterval(() => {
+                // In a real app, you would fetch new transactions here
+                // For simulation, we'll just show a notification
+                if (Math.random() > 0.7) {
+                    showNotification('Checking for new transactions...', 'info');
+                }
+            }, 30000);
+        });
+    </script>
+</body>
+</html>
