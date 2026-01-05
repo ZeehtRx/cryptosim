@@ -899,5 +899,6 @@ def seed_database():
 
 # ============= MAIN =============
 if __name__ == '__main__':
-    seed_database()
-    app.run(debug=True, port=5000)
+    port = int(os.environ.get('PORT', 5000))
+    # Untuk Vercel, gunakan host '0.0.0.0'
+    app.run(host='0.0.0.0', port=port, debug=False)
