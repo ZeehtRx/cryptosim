@@ -1183,7 +1183,7 @@
             }
         });
         
-        // Sell button handler - YANG DIREVISI
+        // Sell button handler 
         document.getElementById('sellButton').addEventListener('click', async function() {
             const crypto = document.getElementById('sellCryptoType').value;
             const amount = parseFloat(document.getElementById('sellAmount').value);
@@ -1358,7 +1358,7 @@
         `;
         document.head.appendChild(style);
         
-        // Debug function untuk testing endpoint
+        // function untuk testing endpoint
         async function testSellEndpoint() {
             console.log('Testing sell endpoint...');
             try {
