@@ -98,7 +98,7 @@ def send_simulation_email(to_email, subject, transaction_id, crypto_type, amount
         
         print(f"[EMAIL SIMULATION] Email saved to: {filename}")
         
-        # OPSIONAL: Jika mau kirim email real (isi dengan konfigurasi SMTP Anda)
+        
         # send_real_email(msg)
         
         return True
@@ -107,9 +107,9 @@ def send_simulation_email(to_email, subject, transaction_id, crypto_type, amount
         return False
 
 def send_real_email(msg):
-    """Fungsi untuk mengirim email real (opsional)"""
+    """Fungsi untuk mengirim email real """
     try:
-        # Konfigurasi SMTP (ganti dengan setting Anda)
+        # Konfigurasi SMTP 
         smtp_server = "smtp.gmail.com"
         smtp_port = 587
         smtp_username = "your_email@gmail.com"
