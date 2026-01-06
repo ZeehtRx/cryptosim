@@ -943,16 +943,14 @@
             </div>
         </div>
         
-<!-- Products Grid dengan debugging -->
+<!-- Products Grid -->
 <div class="products-grid">
     {% for product in products %}
     <div class="product-card fade-in" 
          style="animation-delay: {{ loop.index0 * 0.1 }}s;">
         
-        <!-- DEBUG: Tampilkan nama produk (bisa dihilangkan setelah fix) -->
-        <!-- <div style="position: absolute; top: 5px; right: 5px; background: red; color: white; padding: 2px 5px; font-size: 10px; border-radius: 3px;">
-            {{ product.name }}
-        </div> -->
+     
+
         
         {% if loop.index0 == 0 %}
         <div class="product-badge">Best Seller</div>
@@ -999,21 +997,21 @@
             
             {% else %}
                 <!-- Fallback logic jika tidak ada yang cocok -->
-                {% if loop.index0 == 2 %} <!-- Headphones biasanya di index 2 -->
+                {% if loop.index0 == 2 %} <!-- Headphones  di index 2 -->
                     <img src="/static/images/products/headphones.jpg" alt="{{ product.name }}">
-                {% elif loop.index0 == 3 %} <!-- Mouse biasanya di index 3 -->
+                {% elif loop.index0 == 3 %} <!-- Mouse  di index 3 -->
                     <img src="/static/images/products/mouse.jpg" alt="{{ product.name }}">
-                {% elif loop.index0 == 4 %} <!-- Keyboard biasanya di index 4 -->
+                {% elif loop.index0 == 4 %} <!-- Keyboard  di index 4 -->
                     <img src="/static/images/products/keyboard.jpg" alt="{{ product.name }}">
-                {% elif loop.index0 == 5 %} <!-- Monitor biasanya di index 5 -->
+                {% elif loop.index0 == 5 %} <!-- Monitor  di index 5 -->
                     <img src="/static/images/products/monitor.jpg" alt="{{ product.name }}">
-                {% elif loop.index0 == 6 %} <!-- Watch biasanya di index 6 -->
+                {% elif loop.index0 == 6 %} <!-- Watch  di index 6 -->
                     <img src="/static/images/products/watch.jpg" alt="{{ product.name }}">
-                {% elif loop.index0 == 7 %} <!-- Speaker biasanya di index 7 -->
+                {% elif loop.index0 == 7 %} <!-- Speaker  di index 7 -->
                     <img src="/static/images/products/speaker.jpg" alt="{{ product.name }}">
-                {% elif loop.index0 == 8 %} <!-- Tablet biasanya di index 8 -->
+                {% elif loop.index0 == 8 %} <!-- Tablet  di index 8 -->
                     <img src="/static/images/products/tablet.jpg" alt="{{ product.name }}">
-                {% elif loop.index0 == 9 %} <!-- Camera biasanya di index 9 -->
+                {% elif loop.index0 == 9 %} <!-- Camera di index 9 -->
                     <img src="/static/images/products/camera.jpg" alt="{{ product.name }}">
                 {% else %}
                     <img src="/static/images/products/default.jpg" alt="{{ product.name }}">
