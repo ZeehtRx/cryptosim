@@ -23,7 +23,7 @@ def generate_wallet_qr(wallet_address, user_id):
         # Buat image
         img = qr.make_image(fill_color="black", back_color="white")
         
-        # Tambahkan logo di tengah (opsional)
+        # Tambahkan logo di tengah 
         try:
             logo = Image.open('static/images/logo.png')
             img = add_logo_to_qr(img, logo)
