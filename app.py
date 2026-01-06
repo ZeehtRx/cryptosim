@@ -26,14 +26,14 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = 'static/qr_codes'
 app.config['REPORT_FOLDER'] = 'reports'
 
-# Buat folder jika belum ada
+# Buat folder OS
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 os.makedirs(app.config['REPORT_FOLDER'], exist_ok=True)
 os.makedirs('email_simulations', exist_ok=True)
 
 db = SQLAlchemy(app)
 
-# ============= MODELS =============
+#  MODELS 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -81,13 +81,13 @@ class BalanceHistory(db.Model):
     total_value_usd = db.Column(db.Float)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
-# ============= KONFIGURASI =============
+#  KONFIGURASI NILAI
 CRYPTO_PRICES = {
     'BTC': 50000.0,
     'ETH': 3000.0
 }
 
-# ============= FUNGSI HELPER =============
+#  FUNGSI HELPER 
 def generate_wallet_address():
     characters = string.ascii_letters + string.digits
     return '0x' + ''.join(random.choice(characters) for _ in range(40))
@@ -362,7 +362,7 @@ def generate_transaction_report(user, wallet, transactions, crypto_prices):
     
     return pdf_data
 
-# ============= ROUTES =============
+# ROUTES 
 @app.route('/')
 def index():
     if 'user_id' in session:
@@ -844,7 +844,7 @@ def get_user_info():
         return jsonify({'error': 'User not found'}), 404
     
 
-# ============= SEED DATABASE =============
+#  SEED DATABASE 
 def seed_database():
     with app.app_context():
         db.create_all()
@@ -897,8 +897,8 @@ def seed_database():
             db.session.commit()
             print("Database seeded with sample products!")
 
-# ============= MAIN =============
+
+#  MAIN 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    # Untuk Vercel, gunakan host '0.0.0.0'
-    app.run(host='0.0.0.0', port=port, debug=False)
+    seed_database()
+    app.run(debug=True, port=5000)
