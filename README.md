@@ -5,20 +5,27 @@ This web app was made with :
 
 # **Feature in this webapp**
 ## **Login/SignUp Page**
-<img width="1898" height="895" alt="Screenshot 2025-12-12 203452" src="https://github.com/user-attachments/assets/cc07f68b-5d8e-44dc-9030-676e800bd8a0" />
+<img width="1901" height="892" alt="Screenshot 2026-01-06 191032" src="https://github.com/user-attachments/assets/d2e47066-02c2-4328-9d81-2847d448bc64" />
+
 So in this login systems i made some complex logic that a gmail that already used cannot register again, And an simple Authenticator for login. And the database for the account is not saved to a local storage hoster, but saved to SQLite File in the directory.
 
 ## **Dashboard Page**
-<img width="1906" height="907" alt="Screenshot 2025-12-12 202228" src="https://github.com/user-attachments/assets/46b03cac-095a-4f73-a7b2-f3021d95ef62" />
-In the Dashboard page i made some chart for market overview update history, recent transaction. And of course i add some wallet,crypto holding portofolio and total assets UI/UX.
+<img width="1906" height="903" alt="Screenshot 2026-01-06 191235" src="https://github.com/user-attachments/assets/12c4411d-56e9-43d0-8279-b0808a7d2d0e" />
+<img width="1903" height="911" alt="Screenshot 2026-01-06 191251" src="https://github.com/user-attachments/assets/4daa8f20-b5bb-4840-a5f1-66e11922e1bd" />
+In the Dashboard page i made some recent transaction. And i add some wallet,crypto holding portofolio and total assets UI/UX.
 
-## **Market Overview**
-<img width="1915" height="890" alt="Screenshot 2025-12-12 202243" src="https://github.com/user-attachments/assets/44db8f59-e8f5-4b1a-a67d-85cfc2166a0e" />
-In the Market, We can buy some Cryptocurrency coins. i add some Bitcoin,Ethereum,Binance Coin,Solana,Cardano.
+## **Exchange Overview**
+<img width="1901" height="920" alt="Screenshot 2026-01-06 191355" src="https://github.com/user-attachments/assets/969563f6-82f4-488c-a3e6-de836db3f99f" />
+In the Exchange page, We can buy some Cryptocurrency coins. i add some Bitcoin and Ethereum only.
 
-## **Portfolio Page**
-<img width="1893" height="903" alt="Screenshot 2025-12-12 202257" src="https://github.com/user-attachments/assets/15d52db9-6f14-4749-9237-82d4fb318c21" />
-And the last one is portfolio page that can overview your stats. This page is used for your funding evaluation.
+## **Wallet Overview**
+<img width="1908" height="905" alt="Screenshot 2026-01-06 191523" src="https://github.com/user-attachments/assets/45402926-936a-457d-bfdd-f440b9af55f4" />
+
+This the page for you to deposit a cryptocurrency and USD.
+
+## **E-Commerce Overview**
+<img width="1902" height="915" alt="Screenshot 2026-01-06 191654" src="https://github.com/user-attachments/assets/bd448faf-7a4d-4e94-8147-fad88c8747d9" />
+So this is the page for you to buy some products directly in this website (so the thing is we cant get more fee :) )
 
 ### **Notes**
 
