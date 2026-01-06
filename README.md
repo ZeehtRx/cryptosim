@@ -32,10 +32,14 @@ So this is the page for you to buy some products directly in this website (so th
 i added some blockchain features on the Circular transaction.
 
 # **UI/UX in Mobile**
-<img width="307" height="652" alt="Screenshot 2025-12-12 214921" src="https://github.com/user-attachments/assets/6dd78c69-8b7d-4655-84f0-6060425c41b6" />
-<img width="302" height="655" alt="Screenshot 2025-12-12 215101" src="https://github.com/user-attachments/assets/20a6241a-794b-48b4-82a1-cf21ba71dfec" />
-<img width="301" height="652" alt="Screenshot 2025-12-12 215045" src="https://github.com/user-attachments/assets/82d86467-4def-4e8a-b444-400896efb890" />
-<img width="303" height="654" alt="Screenshot 2025-12-12 215029" src="https://github.com/user-attachments/assets/a228d298-1eaf-4b15-8549-d7f3a40e8f8d" />
-<img width="302" height="648" alt="Screenshot 2025-12-12 215013" src="https://github.com/user-attachments/assets/e7c2d100-88fe-41e0-b166-012e956d7839" />
-<img width="310" height="652" alt="Screenshot 2025-12-12 214955" src="https://github.com/user-attachments/assets/be363c1c-e846-4942-a2e7-21a4bc1c5ae4" />
-<img width="308" height="653" alt="Screenshot 2025-12-12 214942" src="https://github.com/user-attachments/assets/ccf06732-34b9-4e0d-bb73-9b978355dcfb" />
+<img width="452" height="702" alt="Screenshot 2026-01-06 192100" src="https://github.com/user-attachments/assets/25ae353d-4450-40f0-ae88-e06c37c6e349" />
+<img width="570" height="784" alt="Screenshot 2026-01-06 192121" src="https://github.com/user-attachments/assets/65498d74-2c17-457b-92e1-bf6eb087a5ea" />
+<img width="465" height="715" alt="Screenshot 2026-01-06 192219" src="https://github.com/user-attachments/assets/9808d859-55fa-4d5b-813a-887062dc7683" />
+<img width="547" height="776" alt="Screenshot 2026-01-06 192238" src="https://github.com/user-attachments/assets/19d4d39d-c9c5-46ce-aee2-7c4964cbfc68" />
+<img width="475" height="733" alt="Screenshot 2026-01-06 192306" src="https://github.com/user-attachments/assets/e03b396d-63dc-48c7-967a-a6614b4e8f88" />
+<img width="568" height="750" alt="Screenshot 2026-01-06 192319" src="https://github.com/user-attachments/assets/c1738231-a0c8-4a74-a7b6-2e00ff9179d8" />
+<img width="504" height="760" alt="Screenshot 2026-01-06 192344" src="https://github.com/user-attachments/assets/0c2bffa6-7484-42c3-aace-d8d62a1b62fd" />
+<img width="558" height="728" alt="Screenshot 2026-01-06 192400" src="https://github.com/user-attachments/assets/41257737-e308-417f-80d7-ce3ce4cd79f0" />
+<img width="468" height="714" alt="Screenshot 2026-01-06 192425" src="https://github.com/user-attachments/assets/710c012b-9539-4b95-b29d-b2c94adb012c" />
+<img width="573" height="777" alt="Screenshot 2026-01-06 192445" src="https://github.com/user-attachments/assets/9d7e29ed-af57-482c-af2a-a55ec951a889" />
+
