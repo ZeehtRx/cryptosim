@@ -857,7 +857,7 @@ def seed_database():
                     price_usd=1200,
                     price_btc=1200 / CRYPTO_PRICES['BTC'],
                     price_eth=1200 / CRYPTO_PRICES['ETH'],
-                    image="/static/images/products/laptop.jpg"
+                    image_url="https://images.unsplash.com/photo-1541140532154-b024d705b90a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
                 ),
                 Product(
                     name="iPhone 15 Pro",
@@ -865,7 +865,7 @@ def seed_database():
                     price_usd=999,
                     price_btc=999 / CRYPTO_PRICES['BTC'],
                     price_eth=999 / CRYPTO_PRICES['ETH'],
-                    image="https://images.unsplash.com/photo-1695048133142-1a20484d2569?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    image_url="https://images.unsplash.com/photo-1695048133142-1a20484d2569?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
                 ),
                 Product(
                     name="Sony WH-1000XM5",
@@ -873,7 +873,7 @@ def seed_database():
                     price_usd=299,
                     price_btc=299 / CRYPTO_PRICES['BTC'],
                     price_eth=299 / CRYPTO_PRICES['ETH'],
-                    image="/static/images/products/headphones.jpg"
+                    image_url="https://images.unsplash.com/photo-1541140532154-b024d705b90a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
                 ),
                 Product(
                     name="Logitech MX Master 3S",
@@ -881,7 +881,7 @@ def seed_database():
                     price_usd=99,
                     price_btc=99 / CRYPTO_PRICES['BTC'],
                     price_eth=99 / CRYPTO_PRICES['ETH'],
-                    image="https://images.unsplash.com/photo-1527814050087-3793815479db?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    image_url="https://images.unsplash.com/photo-1527814050087-3793815479db?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
                 ),
                 Product(
                     name="Keychron K8 Pro",
@@ -889,7 +889,7 @@ def seed_database():
                     price_usd=119,
                     price_btc=119 / CRYPTO_PRICES['BTC'],
                     price_eth=119 / CRYPTO_PRICES['ETH'],
-                    image="https://images.unsplash.com/photo-1541140532154-b024d705b90a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    image_url="https://images.unsplash.com/photo-1541140532154-b024d705b90a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
                 )
             ]
             for product in products:
