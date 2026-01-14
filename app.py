@@ -5,6 +5,8 @@ import json
 import random
 import string
 import os
+import hashlib
+import time
 import qrcode
 from io import BytesIO
 import base64
@@ -88,6 +90,18 @@ CRYPTO_PRICES = {
 }
 
 #  FUNGSI HELPER 
+# Fungsi sederhana untuk bikin hash 
+def buat_hash_simulasi(data_transaksi, prev_hash="00000"):
+    # Gabungkan data jadi string
+    string_data = json.dumps(data_transaksi) + prev_hash + str(time.time())
+    # Ubah jadi SHA-256
+    return hashlib.sha256(string_data.encode()).hexdigest()
+
+transaksi_1 = {"user": "Budi", "item": "Kripto A", "amount": 100}
+hash_1 = buat_hash_simulasi(transaksi_1)
+
+print(f"Generated Hash: {hash_1}") 
+
 def generate_wallet_address():
     characters = string.ascii_letters + string.digits
     return '0x' + ''.join(random.choice(characters) for _ in range(40))
